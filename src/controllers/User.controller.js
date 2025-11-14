@@ -6,8 +6,22 @@ export class UserController {
     // req es el envio que haces, el envio del cliente
     // res es la respuesta del servidor 
 static createUser = async  (req, res) =>{
-    const user = await User.create(req.body);
-    res.status(201).json("Usuario creado exitosamente");
+
+    const { password } = req.body;
+
+
+    try {
+        const passwordHash = await hashPassword(password);
+        const user = new User(req.body);
+        user.password = passwordHash;
+        await user.save();
+        //const user = await User.create(req.body);
+        res.status(201).json("usuario creado exitosamente");
+    } catch (error) {
+        console.log(error);
+        return
+    }
+
 }
 
 

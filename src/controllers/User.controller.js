@@ -1,18 +1,32 @@
 
-
+import { hashPassword } from '../utils/auth.js';
 import  User  from '../models/User.model.js';
 export class UserController {
     // Lógica para manejar las solicitudes relacionadas con los usuarios
     // req es el envio que haces, el envio del cliente
     // res es la respuesta del servidor 
-static createUser = async  (req, res) =>{
+static createUser = async  (req, res) => {
 
-    const { password } = req.body;
+    const { email,password,phone } = req.body;
+    const phoneExists = await User.findOne ({ where: { phone } });
+
+    const userExists = await User.findOne ({ where: { email } });
+
+    if (userExists) {
+        const error = new Error ('El usuario ya esta registrado');
+        return res.status(409).json({ error:error.message});
+    }
+
+    if (phoneExists) {
+        const error = new Error ('El telefono ya esta registrado');
+        return res.status(409).json({ error:error.message});
+    }
+
 
 
     try {
         const passwordHash = await hashPassword(password);
-        const user = new User(req.body);
+        const user = await User.create (req.body);
         user.password = passwordHash;
         await user.save();
         //const user = await User.create(req.body);
@@ -24,5 +38,34 @@ static createUser = async  (req, res) =>{
 
 }
 
+static getUserAll = async (req, res) => {
+    try {
+        const users = await User.findAll();
+        console.log(users);
+        res.status(200).json(users)
+    }   catch (error) {
+        console.log(error);
+
+    }   
+
+
 
 }
+
+
+
+static updateUser =async (req, res) => {
+    
+    console.log(req.params)
+
+
+
+
+}
+
+}
+
+
+
+
+

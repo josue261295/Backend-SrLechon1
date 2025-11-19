@@ -1,4 +1,4 @@
-import {body} from 'express-validator';
+import {body,param} from 'express-validator';
 import { Router } from 'express';
 import { UserController } from '../controllers/User.controller.js';
 import { handleErrors } from '../middleware/validation.js';
@@ -12,10 +12,11 @@ router.post("/create-user",
         .withMessage("dfgdfgdfgdfgdfgdgf")
         .escape(),
     body('email')
-        .isEmail().withMessage('el email bo es valido'),
-    body('password')
+        .isEmail().withMessage('el email no es valido'),
+    body('password') // averiguar es scape() para password
         .isLength({min:8}).withMessage('la contraseña debe tener al menos 8 caracteres')
         .matches(/[a-z]/).withMessage('la contraseña debe tener al menos una letra minuscula')
+        .matches(/[A-Z]/).withMessage('la contraseña debe tener al menos una letra mayuscula')
         .matches(/[0-9]/)
         .withMessage("La contraseña debe contener al menos un número")
         .matches(/[\W_]/)
@@ -28,6 +29,10 @@ router.post("/create-user",
     
            handleErrors,
     UserController.createUser);
+
+router.get("/users", UserController.getUserAll);
+
+router.put("/user-update/:id",param('id').isInt({gt:0}).toInt().withMessage('el id es invalido'),handleErrors, UserController.updateUser);
 
 
 

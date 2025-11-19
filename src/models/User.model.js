@@ -9,14 +9,16 @@ const User = db.define('usuarios',{
         },      
      email : {
         type: DataTypes.STRING(50),
-        allowNull: false
-        
+        allowNull: false,
+        unique: true,
+
         },    
 
     phone : {
         type: DataTypes.INTEGER,
-        allowNull: false
-        
+        allowNull: false,
+        unique: true,
+
         }, 
 
     password : {

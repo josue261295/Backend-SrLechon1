@@ -53,19 +53,68 @@ static getUserAll = async (req, res) => {
 }
 
 
+static getUserById = async (req, res) => {
+    const { id } = req.params;
+    const userById = await User.findByPk(id);
 
-static updateUser =async (req, res) => {
+    if (!userById) {
+        res.status(404).json({ error: 'Usuario no encontrado' });
+        return;
+    }
+
+    res.status(200).json(userById);
+
+}
+    static updateUser =async (req, res) => {
+    const { id } = req.params;
+    const { password } = req.body;
+    const userUpdate = await User.findOne({ where: { id } });
+    if (!userUpdate) {
+        res.status(404).json({ error: 'Usuario no encontrado' });
+        return;
+    }
     
-    console.log(req.params)
+     req.body.password = await hashPassword(password);
+
+    
+    try {
+        await userUpdate.update(req.body);
+        res.status(200).json({ message: 'Usuario actualizado correctamente' });
+    } catch (error) {
+        console.log(error);
+        
+    }
+
+
+
 
 
 
 
 }
 
+static deleteUser = async (req, res) =>{
+    const { id } = req.params;
+    const userDelete = await User.findOne({ where: { id } });
+
+
+    if (!userDelete) {
+        res.status(404).json({ error: 'Usuario no encontrado' });
+        return;
+    }
+    
+
+
+    try {
+        await userDelete.destroy();
+        res.status(200).json({ message: 'Usuario eliminado correctamente' });
+    } catch (error) {
+        
+    }
+
 }
 
 
 
 
-
+}

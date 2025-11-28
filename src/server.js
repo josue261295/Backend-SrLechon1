@@ -1,7 +1,9 @@
 
 import express from "express"; 
 import userRoutes from './routes/user.routes.js';
+import userRolRoutes from "./routes/rol.routes.js";
 import {db} from './database/db.js';
+import e from "express";
 
 async function conectDB(){
     try{
@@ -16,7 +18,6 @@ async function conectDB(){
 
 conectDB();
 
-
  
 //creamos la aplicacion en express con dode
 const app = express();
@@ -26,6 +27,6 @@ app.use(express.json());
 
 //Ruta de usuario
 app.use('/api', userRoutes);
+app.use('/api', userRolRoutes);
+
 export default app;
-
-

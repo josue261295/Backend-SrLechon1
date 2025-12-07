@@ -4,6 +4,7 @@ import userRoutes from './routes/user.routes.js';
 import userRolRoutes from "./routes/rol.routes.js";
 import {db} from './database/db.js';
 import e from "express";
+import morgan from "morgan";
 
 async function conectDB(){
     try{
@@ -24,7 +25,7 @@ const app = express();
 
 //manejar archivos json API REST
 app.use(express.json());
-
+app.use(morgan('dev'));
 //Ruta de usuario
 app.use('/api', userRoutes);
 app.use('/api', userRolRoutes);

@@ -1,32 +1,71 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import { db } from "../database/db.js";
 
-const User = db.define('usuarios',{
-    name : {
+class User extends Model { }
+User.init({
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+
+    name: {
         type: DataTypes.STRING(40),
         allowNull: false
-        
-        },      
-     email : {
+
+    },
+    email: {
         type: DataTypes.STRING(50),
         allowNull: false,
         unique: true,
 
-        },    
+    },
 
-    phone : {
+    phone: {
         type: DataTypes.INTEGER,
         allowNull: false,
         unique: true,
 
-        }, 
+    },
 
-    password : {
+    password: {
         type: DataTypes.STRING(100),
         allowNull: false,
+    },
+
+    idRol: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+        references: {
+            model: 'roles',
+            key: 'id'
         }
 
-    })
+    },
+    idRol: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'roles',
+            key: 'id'
+        }
 
 
-    export default User;
+    }
+
+
+
+}, {
+    sequelize: db,
+    modelName: 'User',
+    tableName: 'users',
+}
+            
+)
+
+
+
+
+
+export default User;

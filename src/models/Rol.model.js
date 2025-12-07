@@ -1,18 +1,40 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import { db } from '../database/db.js';
  
  
-const Rol = db.define('roles', {
-    name: {
-        type: DataTypes.STRING(35),
-        allowNull: false,
-        unique: true,
+
+class Rol extends Model {}
+    
+   
+    Rol.init({
+
+        id:{
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
     },
-    active: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
+
+        name: {
+            type: DataTypes.STRING(35),
+            allowNull: false,
+            unique: true,
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        }
+    }, 
+    
+        {
+        sequelize: db,
+        modelName: 'Rol',
+        tableName: 'roles', 
     }
-})
- 
+)    
+
+
+
+
+
  
 export default Rol;

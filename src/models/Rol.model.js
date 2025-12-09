@@ -30,10 +30,8 @@ class Rol extends Model {}
         modelName: 'Rol',
         tableName: 'roles', 
     }
+
 )    
-
-
-
 
 
  

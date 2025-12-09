@@ -1,6 +1,9 @@
 
 import { hashPassword } from '../utils/auth.js';
 import  User  from '../models/User.model.js';
+import Rol from '../models/Rol.model.js';
+import { generateJWT } from '../utils/jwt.js';
+
 export class UserController {
     // Lógica para manejar las solicitudes relacionadas con los usuarios
     // req es el envio que haces, el envio del cliente
@@ -40,7 +43,25 @@ static createUser = async  (req, res) => {
 
 static getUserAll = async (req, res) => {
     try {
-        const users = await User.findAll();
+        const users = await User.findAll({
+            include: [
+
+                {
+
+                    model: Rol,
+                    as: 'rol',
+                    attributes: ['id', 'name', "active"],
+                }
+
+                ],
+                attributes: { 
+                    
+                    exclude: ['password'] 
+
+                },  
+                      
+
+        });
         console.log(users);
         res.status(200).json(users)
     }   catch (error) {
@@ -54,17 +75,37 @@ static getUserAll = async (req, res) => {
 
 
 static getUserById = async (req, res) => {
+    
     const { id } = req.params;
-    const userById = await User.findByPk(id);
+        const userById = await User.findByPk(id, {
+            include: [
+                {
+                    model: Rol,
+                    as: 'rol',
+                    attributes: ['id', 'name', "active"]
+                }
+            ],
+            attributes: {
+                exclude: ["createdAt", "updatedAt", "password"],
+            },
+        });
+ 
+        if (!userById) {
+            res.status(404).json({ error: "Usuario no encontrado" })
+            return;
+        }
+ 
+       
 
-    if (!userById) {
-        res.status(404).json({ error: 'Usuario no encontrado' });
-        return;
-    }
-
-    res.status(200).json(userById);
+        res.status(200).json(userById);
 
 }
+
+    
+
+
+
+
     static updateUser =async (req, res) => {
     const { id } = req.params;
     const { password } = req.body;

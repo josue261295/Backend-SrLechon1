@@ -5,6 +5,7 @@ import userRolRoutes from "./routes/rol.routes.js";
 import {db} from './database/db.js';
 import e from "express";
 import morgan from "morgan";
+import "./models/associations.js";
 
 async function conectDB(){
     try{
